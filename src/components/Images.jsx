@@ -31,21 +31,23 @@ function Images()
 
     // Tries to make a fetch call for the most recent images.
     // If none are returned, it makes the call again but with the previous date
-    const retreiveRecentImages = async (date, debug) => {
+    const retreiveRecentImages = async (date, limiter) => {
         const dateString = date.toISOString().substring(0, 10)
-        console.log(date)
         const data = await handleFetch(dateString)
 
         // If the array of photos returned is empty,
         // call the function again with the previous date
-        if (data.photos.length === 0 && debug < 10)
+        if (data.photos.length === 0 && limiter < 50)
         {
             console.log('No data')
             date.setDate(date.getDate() - 1)
-            retreiveRecentImages(date, debug + 1)
-        } else
+            retreiveRecentImages(date, ++limiter)
+        } else {
             console.log(data)
             setImages(data.photos)
+            setEarthDate(date)
+            console.log(date)
+        }
     }
 
     useEffect(() => {
@@ -63,8 +65,11 @@ function Images()
         return <p>Loading images ...</p>
 
     return (
-        <div className="image-container">
-            { imageArray }
+        <div>
+            <h2>{ earthDate && earthDate.toDateString() }</h2>
+            <div className="image-container">
+                { imageArray }
+            </div>
         </div>
     )
 }
