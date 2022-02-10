@@ -6,12 +6,13 @@ import rovers from '../roverInfo'
 
 function Images()
 {
-    const [rover, setRover] = useState('curiosity')
+    const [rover, setRover] = useState(rovers['opportunity'])
     const [images, setImages] = useState([])
+    const [earthDate, setEarthDate] = useState()
 
     const handleFetch = async (date) => {
         const key = process.env.REACT_APP_API_KEY
-        const URL = `https://api.nasa.gov/mars-photos/api/v1/rovers/curiosity/photos?earth_date=${ date }&api_key=${ key }`
+        const URL = `https://api.nasa.gov/mars-photos/api/v1/rovers/${ rover.name_slug }/photos?earth_date=${ date }&api_key=${ key }`
         const res = await fetch(URL)
         const data = await res.json()
         return data
@@ -30,26 +31,32 @@ function Images()
 
     // Tries to make a fetch call for the most recent images.
     // If none are returned, it makes the call again but with the previous date
-    const retreiveRecentImages = async (date) => {
+    const retreiveRecentImages = async (date, debug) => {
         const dateString = date.toISOString().substring(0, 10)
         console.log(date)
         const data = await handleFetch(dateString)
 
         // If the array of photos returned is empty,
         // call the function again with the previous date
-        if (data.photos.length === 0)
+        if (data.photos.length === 0 && debug < 10)
         {
             console.log('No data')
             date.setDate(date.getDate() - 1)
-            retreiveRecentImages(date)
+            retreiveRecentImages(date, debug + 1)
         } else
             console.log(data)
             setImages(data.photos)
     }
 
     useEffect(() => {
-        const d = new Date()
-        retreiveRecentImages(d)
+        let d
+        if (rover.active)
+            d = new Date()
+        else
+            d = new Date(rover.missionEnd)
+
+        const dateString = d.toISOString().substring(0, 10)
+        retreiveRecentImages(d, 0)
     }, [])
 
     if (images.length === 0)
