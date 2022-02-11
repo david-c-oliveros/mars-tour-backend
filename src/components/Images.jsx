@@ -1,35 +1,40 @@
 import '../styling/Images.css'
 
 import { useState, useEffect } from 'react'
+import { Link, useSearchParams } from 'react-router-dom'
 
-import rovers from '../roverInfo'
-
-function Images()
+function Images(props)
 {
-    const [rover, setRover] = useState(rovers['opportunity'])
-    const [images, setImages] = useState([])
-    const [earthDate, setEarthDate] = useState()
+    const [searchParams, setSearchParams] = useSearchParams()
+    const craftName = searchParams.get('craft')
 
     const handleFetch = async (date) => {
         const key = process.env.REACT_APP_API_KEY
-        const URL = `https://api.nasa.gov/mars-photos/api/v1/rovers/${ rover.name_slug }/photos?earth_date=${ date }&api_key=${ key }`
+
+        const URL = `https://api.nasa.gov/mars-photos/api/v1/` +
+//                     `rovers/${ props.craft.name_slug }/photos` +
+                     `rovers/curiosity/photos` +
+                     `?earth_date=${ date }&api_key=${ key }`
+
         const res = await fetch(URL)
         const data = await res.json()
         return data
     }
 
-    const imageArray = images.map((image, index) => {
+    const imageArray = props.images.map((image, index) => {
         return (
             <div key={ image.id }>
-                <div className="image">
-                    <img src={ image.img_src } />
-                </div>
+                <Link to={ `/mars-images/${ image.id }`}>
+                    <div className="image">
+                            <img src={ image.img_src } />
+                    </div>
+                </Link>
                 <p className="camera-name">{ image.camera.full_name }</p>
             </div>
         )
     })
 
-    // Tries to make a fetch call for the most recent images.
+    // Tries to make a fetch call for the most recent images
     // If none are returned, it makes the call again but with the previous date
     const retreiveRecentImages = async (date, limiter) => {
         const dateString = date.toISOString().substring(0, 10)
@@ -39,37 +44,45 @@ function Images()
         // call the function again with the previous date
         if (data.photos.length === 0 && limiter < 50)
         {
-            console.log('No data')
             date.setDate(date.getDate() - 1)
             retreiveRecentImages(date, ++limiter)
         } else {
             console.log(data)
-            setImages(data.photos)
-            setEarthDate(date)
-            console.log(date)
+            props.setImages(data.photos)
+            props.setEarthDate(date)
         }
     }
 
     useEffect(() => {
-        let d
-        if (rover.active)
-            d = new Date()
-        else
-            d = new Date(rover.missionEnd)
+        props.setCraft(props.rovers[craftName])
+        let date
+        if (props.craft)
+        {
+            if (props.craft.active)
+            {
+                date = new Date()
+            }
+            else
+            {
+                date = new Date(props.craft.missionEnd)
+            }
+        }
 
-        const dateString = d.toISOString().substring(0, 10)
-        retreiveRecentImages(d, 0)
-    }, [])
+        date = new Date()
+        const dateString = date.toISOString().substring(0, 10)
+        retreiveRecentImages(date, 0)
+    }, [props.craft])
 
-    if (images.length === 0)
+    if (props.images.length === 0)
         return <p>Loading images ...</p>
 
     return (
-        <div>
-            <h2>{ earthDate && earthDate.toDateString() }</h2>
+        <div className="images-page">
+            <h2>{ props.earthDate && props.earthDate.toDateString() }</h2>
             <div className="image-container">
                 { imageArray }
             </div>
+            <Link to='/'>Back</Link>
         </div>
     )
 }
