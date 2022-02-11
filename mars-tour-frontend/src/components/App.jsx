@@ -10,7 +10,7 @@ import SingleImage from './SingleImage'
 import rovers from '../roverInfo'
 
 function App() {
-    const [craft, setCraft] = useState(null)
+    const [craftName, setCraftName] = useState(null)
     const [images, setImages] = useState([])
     const [earthDate, setEarthDate] = useState(null)
 
@@ -22,9 +22,10 @@ function App() {
                 <Route path='/' element={ <Home /> } />
                 <Route path='/mars-images' element={ <Images images={ images } setImages={ setImages }
                                                       earthDate={ earthDate } setEarthDate={ setEarthDate }
-                                                      craft={ craft } setCraft={ setCraft } rovers={ rovers }/> } />
+                                                      craftName={ craftName }
+                                                      setCraftName={ setCraftName } rovers={ rovers }/> } />
                 <Route path='mars-images/:id' element={ <SingleImage images={ images }
-                                                         craft={ craft }/> } />
+                                                         craftName={ craftName }/> } />
             </Routes>
         </div>
     )

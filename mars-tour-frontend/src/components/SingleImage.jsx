@@ -21,7 +21,7 @@ function SingleImage(props)
                 <img src={ image && image.img_src } />
             </div>
             <p>Hi from Mars!</p>
-            <Link to={ `/mars-images/?craft=${ props.craft }` }>Back</Link>
+            <Link to={ `/mars-images/?craft=${ props.craftName }` }>Back</Link>
         </div>
     )
 }

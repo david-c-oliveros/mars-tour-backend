@@ -1,4 +1,4 @@
-{
+const testData = {
     "photos": [
         {
             "id": 795530,
@@ -9445,3 +9445,5 @@
         }
     ]
 }
+
+export default testData
