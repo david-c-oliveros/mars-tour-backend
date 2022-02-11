@@ -2,6 +2,7 @@
 
 # dependencies
 /mars-tour-frontend/node_modules
+/mars-tour-backend/node_modules
 /.pnp
 .pnp.js
 
