@@ -8,12 +8,6 @@
     min-height: 100vh;
 }
 
-header {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-}
-
 .content {
     display: flex;
     flex-direction: row;

@@ -18,13 +18,16 @@ function SingleImage(props)
     if (image)
         console.log(image.img_src)
     return (
-        <div className="single-image-page">
+        <div className='single-image-page'>
             <Header />
-            <div className="image-show">
-                <img src={ image && image.img_src } />
+            <div className='single-image-page-content'>
+                <img className='image-show' src={ image && image.img_src } />
+                <div className='description'>
+                    <p>Date Taken - { props.earthDate && props.earthDate.toDateString() }</p>
+                    <p>Camera - { image && image.camera.full_name }</p>
+                </div>
             </div>
-            <p>Hi from Mars!</p>
-            <Link to={ `/mars-images/?craft=${ props.craftName }` }>Back</Link>
+            <Link className='show-back' to={ `/mars-images/?craft=${ props.craftName }` }>Back</Link>
         </div>
     )
 }

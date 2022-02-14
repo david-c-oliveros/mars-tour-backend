@@ -6,12 +6,12 @@ import { Link, useSearchParams } from 'react-router-dom'
 import Header from './Header'
 import testData from '../test-data'
 
-const TEST = true
+const TEST = false
 
 function Images(props)
 {
     const [searchParams, setSearchParams] = useSearchParams()
-    const craftName = searchParams.get('craft')
+    const craftName = searchParams.get('craft') || 'curiosity'
     const [craft, setCraft] = useState(props.rovers[craftName])
     const [debug_fetchCount, setDebug_fetchCount] = useState(0)
 
@@ -36,11 +36,9 @@ function Images(props)
         return (
             <div key={ image.id }>
                 <Link to={ `/mars-images/${ image.id }`}>
-                    <div className="image">
-                            <img src={ image.img_src } />
-                    </div>
+                    <img className='image' src={ image.img_src } />
                 </Link>
-                <p className="camera-name">{ image.camera.full_name }</p>
+                <p className='camera-name'>{ image.camera.full_name }</p>
             </div>
         )
     })
@@ -73,6 +71,7 @@ function Images(props)
     }
 
     useEffect(() => {
+        console.log(craftName)
         props.setCraftName(craftName)
         let date
         if (craft.active)
@@ -87,7 +86,10 @@ function Images(props)
         const dateString = date.toISOString().substring(0, 10)
 
         if (TEST)
+        {
+            props.setEarthDate(new Date('Sun Jan 01 0000'))
             props.setImages(testData.photos)
+        }
         else
             retreiveRecentImages(date, 0)
 
@@ -97,13 +99,15 @@ function Images(props)
         return <p>Loading images ...</p>
 
     return (
-        <div className="images-page">
+        <div className='images-page'>
             <Header />
-            <h2>{ props.earthDate && props.earthDate.toDateString() }</h2>
-            <div className="image-container">
-                { imageArray }
+            <div className='images-page-content'>
+                <h2>{ props.earthDate && props.earthDate.toDateString() }</h2>
+                <div className='image-container'>
+                    { imageArray }
+                </div>
             </div>
-            <Link to='/'>Back</Link>
+            <Link className='images-back' to='/'>Back</Link>
         </div>
     )
 }
