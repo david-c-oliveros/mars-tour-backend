@@ -2,6 +2,8 @@ import '../styling/SingleImage.css'
 import { useState, useEffect } from 'react'
 import { Link, useParams } from 'react-router-dom'
 
+import Header from './Header'
+
 function SingleImage(props)
 {
     const [image, setImage] = useState(null)
@@ -17,6 +19,7 @@ function SingleImage(props)
         console.log(image.img_src)
     return (
         <div className="single-image-page">
+            <Header />
             <div className="image-show">
                 <img src={ image && image.img_src } />
             </div>

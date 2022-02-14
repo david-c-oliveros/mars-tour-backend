@@ -3,6 +3,7 @@ import '../styling/Images.css'
 import { useState, useEffect } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 
+import Header from './Header'
 import testData from '../test-data'
 
 const TEST = true
@@ -97,6 +98,7 @@ function Images(props)
 
     return (
         <div className="images-page">
+            <Header />
             <h2>{ props.earthDate && props.earthDate.toDateString() }</h2>
             <div className="image-container">
                 { imageArray }
