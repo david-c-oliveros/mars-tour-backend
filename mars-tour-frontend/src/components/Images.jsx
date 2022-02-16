@@ -43,12 +43,31 @@ function Images(props)
         )
     })
 
+    const saveInBackend = async (data) => {
+        const URL = 'http://localhost:9000/photos/'
+        const options = {
+            method: 'POST',
+            body: JSON.stringify(data),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }
+
+        try {
+            await fetch(URL, options)
+            console.log('saved', options.body)
+        } catch(err) {
+            console.log(err)
+        }
+    }
+
     // Tries to make a fetch call for the most recent images
     // If none are returned, it makes the call again but with the previous date
     const retreiveRecentImages = async (date, limiter) => {
         console.log(date)
         const dateString = date.toISOString().substring(0, 10)
         const data = await handleFetch(dateString)
+        console.log(data)
 
         if (data === -1)
         {
@@ -64,9 +83,9 @@ function Images(props)
             date.setDate(date.getDate() - 1)
             retreiveRecentImages(date, ++limiter)
         } else {
-            console.log(data)
             props.setImages(data.photos)
             props.setEarthDate(date)
+            saveInBackend(data.photos)
         }
     }
 

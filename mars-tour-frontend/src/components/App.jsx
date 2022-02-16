@@ -14,8 +14,6 @@ function App() {
     const [images, setImages] = useState([])
     const [earthDate, setEarthDate] = useState(null)
 
-    console.log(images)
-
     return (
         <div className="App">
             <Routes>

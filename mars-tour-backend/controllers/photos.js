@@ -35,10 +35,9 @@ router.get('/', async (req, res) => {
 /*        Post Route        */
 /****************************/
 router.post('/', async (req, res) => {
-    console.log(req.body)
     try {
-        const newPhoto = await Photo.create(req.body)
-        res.json(newPhoto)
+        const newPhotos = await Photo.insertMany(req.body)
+        res.json(newPhotos)
     } catch (err) {
         res.send('Error: ' + err)
     }

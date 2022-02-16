@@ -11,12 +11,19 @@ function SingleImage(props)
 
     const imgIndex = props.images.findIndex(el => el.id == id)
 
-    useEffect(async () => {
-        await setImage(props.images[imgIndex])
-    }, [image])
+    const getImage = async () => {
+        const URL = `http://localhost:9000/photos/${ id }`
 
-    if (image)
-        console.log(image.img_src)
+        const res  = await fetch(URL)
+        const data = await res.json()
+
+        setImage(data)
+    }
+
+    useEffect(() => {
+        getImage()
+    }, [])
+
     return (
         <div className='single-image-page'>
             <Header />
