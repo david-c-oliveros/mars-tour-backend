@@ -1,3 +1,4 @@
+require('dotenv').config()
 const express = require('express')
 app = express()
 const cors = require('cors')
@@ -10,8 +11,8 @@ require('./db')
 /*************************/
 /*        Configs        */
 /*************************/
-PORT = 9000
-const acceptList = ['http://localhost:3000']
+PORT = process.env.PORT
+const acceptList = [process.env.FRONTEND_URL]
 const options = {
     origin: function(origin, callback) {
         if (acceptList.indexOf(origin) !== -1 || !origin)
