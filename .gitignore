@@ -1,8 +1,7 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
 # dependencies
-/mars-tour-frontend/node_modules
-/mars-tour-backend/node_modules
+node_modules
 /.pnp
 .pnp.js
 
